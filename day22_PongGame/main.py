@@ -24,11 +24,15 @@ direction = ""
 while game_is_on:
     time.sleep(0.2)
     screen.update()
-    ball.move(direction)
-    if ball.ycor() > 280:
-        direction = ball.bounce("top")
-    elif ball.ycor() < -280:
-        direction = ball.bounce("bottom")
+    ball.move()
+    if ball.ycor() > 280 or ball.ycor() < -280:
+        ball.bounce()
+
+    # ball.move(direction)
+    # if ball.ycor() > 280:
+    #     ball.bounce("top")
+    # elif ball.ycor() < -280:
+    #     ball.bounce("bottom")
 
 
 screen.exitonclick()
