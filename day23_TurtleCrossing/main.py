@@ -7,18 +7,33 @@ from scoreboard import Scoreboard
 screen = Screen()
 screen.setup(width=600, height=600)
 screen.tracer(0)
-screen.listen()
-player = Player()
 
-screen.onkey(player.move, "Up")
-screen_edge = (0,300)
+player = Player()
+car_manager = CarManager()
+scoreboard = Scoreboard()
+
+screen.listen()
+screen.onkeypress(player.move_up, "Up")
+screen_edge = (0, 300)
 
 game_is_on = True
 while game_is_on:
-    time.sleep(0.1)
-    # Detect collison with wall
+    time.sleep(car_manager.car_speed)
+    car_manager.create_car()
+    car_manager.move_cars()
+
+    # Add point Detect collison with wall
     if player.distance(screen_edge) < 20:
         player.reset_turtle()
-        
+        scoreboard.add_level()
+        scoreboard.update_score()
+        car_manager.increase_speed()
+
     # Detect collision with car
+    for car in car_manager.all_cars:
+        if player.distance(car) < 20:
+            game_is_on = False
+            scoreboard.game_over()
     screen.update() 
+
+screen.exitonclick()
