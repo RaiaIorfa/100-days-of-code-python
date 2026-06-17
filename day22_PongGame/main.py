@@ -1,6 +1,8 @@
 from turtle import Screen
 from paddle import Paddle
 from ball import Ball
+from scoreboard import Scoreboard
+from divider import Divider
 import time
 
 screen = Screen()
@@ -8,6 +10,8 @@ screen.tracer(0)
 screen.bgcolor("black")
 screen.setup(width=800, height=600)
 screen.title("Pong")
+scoreboard = Scoreboard()
+divider = Divider()
 
 ball = Ball()
 p1 = Paddle((-350,0))
@@ -20,8 +24,9 @@ screen.onkey(p1.move_up, "w")
 screen.onkey(p1.move_down, "s")
 
 game_is_on = True
+
 while game_is_on:
-    time.sleep(0.2)
+    time.sleep(ball.move_speed)
     screen.update()
 
     ball.move()
@@ -43,11 +48,18 @@ while game_is_on:
     if ball.xcor() > 380:
         ball.reset_position()
         ball.bounce_x()
+        scoreboard.l_point()
+        scoreboard.update_score()
 
     # Detect ball out of bounds Left Side(p1)
     elif ball.xcor() < -380:
         ball.reset_position()
         ball.bounce_x()
+        scoreboard.r_point()
+        scoreboard.update_score()
+    
+    if scoreboard.check_winner():
+        game_is_on = False
 
 
 screen.exitonclick()
